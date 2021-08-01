@@ -68,9 +68,25 @@ function initActions() {
     } else {
       console.log("Clicked elemenet is not a book");
     }
+const tagName = 
+    form.addEventListener('click', function() {
+if() {
+
+}
+
+    });
   });
   // }
 }
+
+/* FILTERS */
+
+const filters = [];
+
+const form = document.querySelector('.filters');
+
+
+
 
 /*RUN FUNCTIONS */
 
