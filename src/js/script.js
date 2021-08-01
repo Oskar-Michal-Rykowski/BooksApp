@@ -28,7 +28,7 @@ function render() {
 
 function initActions() {
   //Stwórz referencję do .book__image, klasy favourite
-  const booksImages = booksList.querySelectorAll(".book__image");
+  //const booksImages = booksList.querySelectorAll(".book__image");
 
   const favoriteBook = "favorite";
 
@@ -37,29 +37,39 @@ function initActions() {
   console.log("favoriteBooks", favoriteBooks);
 
   //Do każdego zdjęcia książek
-  for (let bookImage of booksImages) {
-    console.log("bookImage", bookImage);
-    //Stwórz referencję do Atrybutu
-    const favoriteBookAtribute = bookImage.getAttribute("data-id");
-    //Dodaj nasłuchiwacz
-    bookImage.addEventListener("dblclick", function (event) {
-      event.preventDefault();
+  // for (let bookImage of booksImages) {
+  //   console.log("bookImage", bookImage);
+  //Stwórz referencję do Atrybutu
+
+  //Dodaj nasłuchiwacz
+  booksList.addEventListener("dblclick", function (event) {
+    event.preventDefault();
+    const clickedElementIsBook =
+      event.target.offsetParent.classList.contains("book__image");
+    console.log("event.target", clickedElementIsBook);
+
+    if (clickedElementIsBook == true) {
+      const favoriteBookAtribute =
+        event.target.offsetParent.getAttribute("data-id");
       const theBookIndex = favoriteBooks.indexOf(favoriteBookAtribute);
       //Jeśli id znajduje się w tablicy ulubionych książek
       if (!favoriteBooks[theBookIndex]) {
         //Dodaj id książki do tablicy favoriteBooks
         favoriteBooks.push(favoriteBookAtribute);
         //oraz nada mu klasę 'favourite'
-        bookImage.classList.add(favoriteBook);
+        event.target.offsetParent.classList.add(favoriteBook);
 
         console.log("add " + favoriteBookAtribute + " to favoriteBooks");
       } else {
         favoriteBooks.splice(theBookIndex, 1);
         console.log("remove " + favoriteBookAtribute + " to favoriteBooks");
-        bookImage.classList.remove(favoriteBook);
+        event.target.offsetParent.classList.remove(favoriteBook);
       }
-    });
-  }
+    } else {
+      console.log("Clicked elemenet is not a book");
+    }
+  });
+  // }
 }
 
 /*RUN FUNCTIONS */
