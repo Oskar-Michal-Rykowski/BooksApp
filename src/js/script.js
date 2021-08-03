@@ -39,7 +39,7 @@ function initActions() {
   //Do każdego zdjęcia książek
   // for (let bookImage of booksImages) {
   //   console.log("bookImage", bookImage);
-  //Stwórz referencję do Atrybutu
+  //Stwórz referencję do Atrybutu}
 
   //Dodaj nasłuchiwacz
   booksList.addEventListener("dblclick", function (event) {
@@ -68,25 +68,64 @@ function initActions() {
     } else {
       console.log("Clicked elemenet is not a book");
     }
-const tagName = 
-    form.addEventListener('click', function() {
-if() {
-
-}
-
-    });
   });
-  // }
+
+  /* FILTERS */
+
+  const filters = [];
+  console.log("filters", filters);
+  const form = document.querySelector(".filters");
+
+  form.addEventListener("click", function (event) {
+    const clickedElement = event.target;
+
+    const tagName = clickedElement.tagName;
+
+    const type = clickedElement.getAttribute("type");
+
+    const name = clickedElement.getAttribute("name");
+
+    const value = clickedElement.getAttribute("value");
+
+    const clickedElementIsCheckbox =
+      tagName == "INPUT" && type == "checkbox" && name == "filter";
+
+    if (clickedElementIsCheckbox && clickedElement.checked == true) {
+      console.log("Add", value, "to filters");
+      filters.push(value);
+    } else if (clickedElementIsCheckbox && clickedElement.checked == false) {
+      console.log("Remove", value, "from filters");
+      const valueIndex = filters.indexOf(value);
+      filters.splice(valueIndex, 1);
+    }
+    filterBooks();
+  });
+
+  /* FILTER BOOKS */
+
+  function filterBooks() {
+    for (let eachBookdata of dataSource.books) {
+      let shouldBeHidden = false;
+
+      for (const option of filters) {
+        if (!eachBookdata.details[option] == false) {
+          shouldBeHidden = true;
+          break;
+        }
+      }
+
+      const bookImage = booksList.querySelector(
+        '.book__image[data-id="' + eachBookdata.id + '"'
+      );
+
+      if (shouldBeHidden === true) {
+        bookImage.classList.add("hidden");
+      } else {
+        bookImage.classList.remove("hidden");
+      }
+    }
+  }
 }
-
-/* FILTERS */
-
-const filters = [];
-
-const form = document.querySelector('.filters');
-
-
-
 
 /*RUN FUNCTIONS */
 
