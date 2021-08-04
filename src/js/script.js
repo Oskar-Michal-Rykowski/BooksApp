@@ -5,6 +5,7 @@
 const bookTemplate = Handlebars.compile(
   document.querySelector("#template-book").innerHTML
 );
+
 const booksList = document.querySelector(".books-list");
 
 /* FUNCTIONS */
@@ -15,13 +16,53 @@ const booksList = document.querySelector(".books-list");
 function render() {
   // Wewnątrz niej przejdź po każdym elemencie z dataSource.books. Pamiętaj, że plik script.js ma do tego obiektu bezpośredni dostęp.
   for (let eachBookdata of dataSource.books) {
+    console.log("eachBookdata.rating", eachBookdata.rating);
+    const ratingBgc = determineRatingBgc(eachBookdata.rating);
+    const ratingWidth = eachBookdata.rating * 10;
+    console.log("ratingBgc", ratingBgc);
+    console.log("ratingWidth", ratingWidth);
+
+    eachBookdata["ratingBgc"] = ratingBgc;
+    eachBookdata["ratingWidth"] = ratingWidth;
     // Wewnątrz tej pętli zadbaj o wygenerowanie kodu HTML na podstawie szablonu oraz danych o konkretnej książce.
     const generatedHTML = bookTemplate(eachBookdata);
     // Na postawie tego kodu HTML wygeneruj element DOM.
     const generatedDOM = utils.createDOMFromHTML(generatedHTML);
     // Wygenerowany element DOM dołącz jako nowe dziecko DOM do listy .books-list.
     booksList.appendChild(generatedDOM);
+
+    /* RATINGS */
+    // background
+    // const ratingTemplate = Handlebars.compile(
+    //   document.querySelector(".book__rating__fill").innerHTML
+    // );
+    // const generatedRatingBgcHTML = ratingTemplate(ratingBgc);
+    // console.log("generatedratingBgcHTML", generatedRatingBgcHTML);
+    // const generatedWidthHTML = ratingTemplate(ratingWidth);
+    // console.log("generatedWidthHTML", generatedWidthHTML);
+    // const generatedRatingDOM = utils.createDOMFromHTML(generatedratingBgcHTML);
+    // booksList.appendChild(generatedRatingDOM);
+    //width
   }
+}
+
+/* Ratings */
+
+function determineRatingBgc(rating) {
+  let ratingBackground = "";
+
+  if (rating < 6) {
+    ratingBackground = "linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%)";
+  } else if (rating > 6 && rating <= 8) {
+    ratingBackground = "linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%);";
+  } else if (rating > 8 && rating <= 9) {
+    ratingBackground = "linear-gradient(to bottom, #299a0b 0%, #299a0b 100%)";
+  } else if (rating > 9) {
+    ratingBackground = "linear-gradient(to bottom, #ff0084 0%,#ff0084 100%)";
+  }
+  return ratingBackground;
+
+  // console.log("ratingBackground", ratingBackground);
 }
 
 /* Adding products to favorities */
