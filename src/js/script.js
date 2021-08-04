@@ -4,7 +4,7 @@ class BookList {
 
     thisBookList.getElements();
     thisBookList.render();
-    thisBookList.filterBooks();
+
     thisBookList.initActions();
   }
 
@@ -18,7 +18,7 @@ class BookList {
       document.querySelector("#template-book").innerHTML
     );
     this.favoriteBook = "favorite";
-    // filters = [];
+    this.filters = [];
   }
 
   render() {
@@ -69,9 +69,8 @@ class BookList {
     });
 
     /* FILTERS */
-    const filters = [];
 
-    console.log("filters", filters);
+    console.log("filters", this.filters);
     const form = document.querySelector(".filters");
 
     form.addEventListener("click", function (event) {
@@ -90,22 +89,22 @@ class BookList {
 
       if (clickedElementIsCheckbox && clickedElement.checked == true) {
         console.log("Add", value, "to filters");
-        filters.push(value);
+        this.filters.push(value);
       } else if (clickedElementIsCheckbox && clickedElement.checked == false) {
         console.log("Remove", value, "from filters");
-        const valueIndex = filters.indexOf(value);
-        filters.splice(valueIndex, 1);
+        const valueIndex = this.filters.indexOf(value);
+        this.filters.splice(valueIndex, 1);
       }
-      this.filterBooks(filters);
+      this.filterBooks();
     });
   }
   /* FILTER BOOKS */
 
-  filterBooks(filters) {
+  filterBooks() {
     for (let eachBookdata of dataSource.books) {
       let shouldBeHidden = false;
 
-      for (const option of filters) {
+      for (const option of this.filters) {
         if (!eachBookdata.details[option] == false) {
           shouldBeHidden = true;
           break;
