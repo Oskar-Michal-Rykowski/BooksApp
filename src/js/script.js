@@ -4,7 +4,6 @@ class BookList {
 
     thisBookList.getElements();
     thisBookList.render();
-
     thisBookList.initActions();
   }
 
@@ -13,34 +12,38 @@ class BookList {
   }
 
   getElements() {
-    this.booksList = document.querySelector(".books-list");
-    this.bookTemplate = Handlebars.compile(
+    const thisBookList = this;
+
+    thisBookList.booksList = document.querySelector(".books-list");
+    thisBookList.bookTemplate = Handlebars.compile(
       document.querySelector("#template-book").innerHTML
     );
-    this.favoriteBook = "favorite";
-    this.filters = [];
+    thisBookList.favoriteBook = "favorite";
+    thisBookList.filters = [];
   }
 
   render() {
+    const thisBookList = this;
+
     for (let eachBookdata of dataSource.books) {
       const ratingBgc = this.determineRatingBgc(eachBookdata.rating);
       const ratingWidth = eachBookdata.rating * 10;
       eachBookdata["ratingBgc"] = ratingBgc;
       eachBookdata["ratingWidth"] = ratingWidth;
 
-      const generatedHTML = this.bookTemplate(eachBookdata);
+      const generatedHTML = thisBookList.bookTemplate(eachBookdata);
       const generatedDOM = utils.createDOMFromHTML(generatedHTML);
-      this.booksList.appendChild(generatedDOM);
+      thisBookList.booksList.appendChild(generatedDOM);
     }
   }
 
-  /* Adding products to favorities */
-
   initActions() {
+    const thisBookList = this;
+
     const favoriteBooks = [];
     console.log("favoriteBooks", favoriteBooks);
 
-    this.booksList.addEventListener("dblclick", function (event) {
+    thisBookList.booksList.addEventListener("dblclick", function (event) {
       event.preventDefault();
       const clickedElementIsBook =
         event.target.offsetParent.classList.contains("book__image");
@@ -55,16 +58,14 @@ class BookList {
           //Dodaj id książki do tablicy favoriteBooks
           favoriteBooks.push(favoriteBookAtribute);
           //oraz nada mu klasę 'favourite'
-          event.target.offsetParent.classList.add(this.favoriteBook);
+          event.target.offsetParent.classList.add(thisBookList.favoriteBook);
 
           console.log("add " + favoriteBookAtribute + " to favoriteBooks");
         } else {
           favoriteBooks.splice(theBookIndex, 1);
           console.log("remove " + favoriteBookAtribute + " to favoriteBooks");
-          event.target.offsetParent.classList.remove(this.favoriteBook);
+          event.target.offsetParent.classList.remove(thisBookList.favoriteBook);
         }
-      } else {
-        console.log("Clicked elemenet is not a book");
       }
     });
 
@@ -89,18 +90,21 @@ class BookList {
 
       if (clickedElementIsCheckbox && clickedElement.checked == true) {
         console.log("Add", value, "to filters");
-        this.filters.push(value);
+        thisBookList.filters.push(value);
       } else if (clickedElementIsCheckbox && clickedElement.checked == false) {
         console.log("Remove", value, "from filters");
-        const valueIndex = this.filters.indexOf(value);
-        this.filters.splice(valueIndex, 1);
+        const valueIndex = thisBookList.filters.indexOf(value);
+        thisBookList.filters.splice(valueIndex, 1);
       }
-      this.filterBooks();
+      thisBookList.filterBooks();
     });
   }
+
   /* FILTER BOOKS */
 
   filterBooks() {
+    const thisBookList = this;
+
     for (let eachBookdata of dataSource.books) {
       let shouldBeHidden = false;
 
@@ -111,7 +115,7 @@ class BookList {
         }
       }
 
-      const bookImage = this.booksList.querySelector(
+      const bookImage = thisBookList.booksList.querySelector(
         '.book__image[data-id="' + eachBookdata.id + '"'
       );
 
@@ -145,3 +149,5 @@ class BookList {
 }
 
 const app = new BookList();
+
+console.log(app);
